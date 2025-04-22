@@ -36,6 +36,10 @@ int main(int ac, char **av)
 		}
 
 		/* Remove trailing newline character. */
+		if (read > 0 && line[read - 1] == '\n')
+			line[read - 1] = '\0';
+
+		/* Remove trailing newline character. */
 		if (is_only_whitespace(line))
 			continue;
 
@@ -43,16 +47,15 @@ int main(int ac, char **av)
 		args = split_line(line);
 		if (args == NULL || args[0] == NULL)
 		{
-			free_args(args);
 			continue;
 		}
 		/* Execute the status of the command and update's */
-		status = execute_command(command_line);
+		status = execute_command(args, program_name);
 
 		/* Free allocated memory*/
 		free(args);
 	}
 	/* Free line buffer. */
-	free (line);
+	free(line);
 	return (0);
 }

@@ -31,7 +31,7 @@ char **split_line(char *line)
 
 	while (token != NULL)
 	{
-		tokens[positions = strdup(token);
+		tokens[position] = strdup(token);
 		if (!tokens[position])
 		{
 			perror("strdup error");
@@ -50,6 +50,7 @@ char **split_line(char *line)
 				exit(EXIT_FAILURE);
 			}
 		}
+
 		token = strtok(NULL, " \t\r\n\a");
 	}
 	tokens[position] = NULL;

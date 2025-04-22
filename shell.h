@@ -14,8 +14,12 @@
 /* Function Prototypes */
 void display_prompt(void);
 char *read_command_line(void);
-int execute_command(char *command);
+int execute_command(char **args, char *program_name);
 char **split_line(char *line);
-whitespace
+int is_only_whitespace(char *str);
+
+extern char **environ;
+
+
 
 #endif /* SHELL_H */
