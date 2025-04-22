@@ -8,10 +8,13 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#define MAX_ARGS 64
+/* Function Prototypes */
+void display_prompt(void);
+char *read_command_line(void);
+int execute_command(char **args, char *program_name);
+char **split_line(char *line);
+int is_only_whitespace(char *str);
 
-void prompt(void);
-void execute_command(char **args);
-void parse_line(char *line, char **args);
+extern char **environ;
 
 #endif /* SHELL_H */

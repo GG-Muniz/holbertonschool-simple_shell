@@ -1,43 +1,60 @@
-#include "shell.h"
+#include "shell.c"
 
 /**
- * main - entry point for simple shell
- *
- * Return: always 0
+ * main - function to parse simple shell in linux.
+ * @ac: argument command.
+ * @av: argument vector.
+ * Return: 1 on success, else 0.
  */
-int main(void)
+int main(int ac, char **av)
 {
-	char *line + NULL;
-	size_t len = 0:
+	char *line = NULL;
+	char **args = NULL;
+	size_t len = 0;
 	ssize_t read;
-	char *args[MAX_ARGS];
+	int status = 1;
 
-	while (1)
+	/* Store program name for error messages. */
+	char *program_name = av[0];
+	(void)ac; /* Silence unused parameter warning */
+
+	/* Main loop that keeps the shell running in interactive mdoe */
+	while (status)
 	{
-		prompt();
+		/* Show if shell is running in interactive mode*/
+		if (isatty(STDIN_FILENO))
+			write(STDOUT_FILENO, "$ ", 2);
+
+		/* Read the user's imput */
 		read = getline(&line, &len, stdin);
 		if (read == -1)
 		{
-			free(line);
+			if (isatty(STDIN_FILENO))
+				write(STDOUT_FILENO, "\n ", 1);
 			break;
 		}
 
-		if (line[read - 1] == '\n')
-		    line[read - 1] = '\0;
+		/* Remove trailing newline character. */
+		if (read > 0 && line[read - 1] == '\n')
+			line[read - 1] = '\0';
 
-		parse_line(line, args);
-		if (args[0] != NULL)
-			execute_command(args);
+		/* Remove trailing newline character. */
+		if (is_only_whitespace(line))
+			continue;
+
+		/* Split the line into command and arguments. */
+		args = split_line(line);
+		if (args == NULL || args[0] == NULL)
+		{
+			continue;
+		}
+		/* Execute the status of the command and update's */
+		status = execute_command(args, program_name);
+
+		/* Free allocated memory*/
+		free(args);
 	}
-
+	/* Free line buffer. */
+	free(line);
 	return (0);
-}
-
-/**
- * prompt - displays the shell prompt
- */
-void prompt(void)
-{
-	if (isatty(STDIN_FILENO))
-	   write(STDOUT_FILENO, "$ ", 2);
 }
