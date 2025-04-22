@@ -44,7 +44,7 @@ int main(int ac, char **av)
 		/* Skip empty commands */
 		if (args == NULL || args[0] == NULL)
 		{
-			free_args(args);
+			free(args);
 			continue;
 		}
 		/* Execute the command with arguments */

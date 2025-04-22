@@ -36,7 +36,7 @@ char **split_line(char *line)
         if (!tokens[position])
         {
             /* Clean up on error */
-            free_args(tokens);
+            free(tokens);
             perror("strdup error");
             exit(EXIT_FAILURE);
         }
