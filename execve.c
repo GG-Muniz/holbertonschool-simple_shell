@@ -27,7 +27,7 @@ int execute_command(char **args, char *program_name)
 		if (execve(args[0], args, environ) == -1)
 		{
 			/* Format error message to match expected output */
-			fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
+			fprintf(stderr, "%s: No such file or directory\n", program_name);
 			exit(EXIT_FAILURE);
 		}
 	}

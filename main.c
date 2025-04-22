@@ -23,7 +23,7 @@ int main(int ac, char **av)
 	{
 		/* Display prompt if shell is running in interactive mode */
 		if (isatty(STDIN_FILENO))
-			write(STDOUT_FILENO, "$ ", 2);
+			write(STDOUT_FILENO, "#cisfun$ ", 9);
 
 		/* Read a line from the user */
 		read = getline(&line, &len, stdin);
@@ -38,7 +38,11 @@ int main(int ac, char **av)
 		if (read > 0 && line[read - 1] == '\n')
 			line[read - 1] = '\0';
 
-		/* Parse input into arguments, handling whitespace properly */
+		/* Skip empty commands or whitespace */
+		if (is_only_whitespace(line))
+			continue;
+
+		/* Parse input into arguments */
 		args = split_line(line);
 
 		/* Skip empty commands */
@@ -47,14 +51,31 @@ int main(int ac, char **av)
 			free(args);
 			continue;
 		}
+
 		/* Execute the command with arguments */
 		status = execute_command(args, program_name);
 
 		/* Free allocated memory */
-		free(args);
+		free_args(args);
 	}
+
 	/* Free the line buffer */
 	free(line);
 	return (0);
 }
 
+/**
+ * free_args - Frees the memory allocated for the argument array
+ * @args: Array of arguments to free
+ */
+void free_args(char **args)
+{
+	int i;
+
+	if (args)
+	{
+		for (i = 0; args[i]; i++)
+			free(args[i]);
+		free(args);
+	}
+}
