@@ -2,35 +2,57 @@
 
 /**
  * main - entry point for the simple shell.
+ * @ac: argument count
+ * @av: argument vector
+ *
  * Return: 0 if successfull.
  */
-int main(void)
+int main(int ac, char **av)
 {
-	char *command_line = NULL;
+	char *line = NULL;
+	char **args = NULL;
+	size_t len = 0;
+	ssize_t read;
 	int status = 1;
 
+	/* Store program name for error messages. */
+	char *program_name = av[0];
+	(void)ac; /* Silence unused parameter warning */
+
+	/* Main loop that keeps the shell running in interactive mdoe */
 	while (status)
 	{
-		/* Show the shell Prompt */
-		display_prompt();
+		/* Show if shell is running in interactive mode*/
+		if (isatty(STDIN_FILENO))
+			write(STDOUT_FILENO, "$ ", 2);
 
 		/* Read the user's imput */
-		command_line = read_command_line();
-
-		/* Handle the End-Of-File (eof) condition (Ctrl+D) */
-		if (command_line == NULL)
+		read = getline(&line, &len, stdin);
+		if (read == -1)
 		{
-			if (isatty(STDIN_FILENO)) /* Shows if we are in interactive mode */
-				printf("\n");
+			if (isatty(STDIN_FILENO))
+				write(STDOUT_FILENO, "\n ", 1);
 			break;
 		}
 
+		/* Remove trailing newline character. */
+		if (is_only_whitespace(line))
+			continue;
+
+		/* Split the line into command and arguments. */
+		args = split_line(line);
+		if (args == NULL || args[0] == NULL)
+		{
+			free_args(args);
+			continue;
+		}
 		/* Execute the status of the command and update's */
 		status = execute_command(command_line);
 
 		/* Free allocated memory*/
-		free(command_line);
+		free(args);
 	}
-
+	/* Free line buffer. */
+	free (line);
 	return (0);
 }

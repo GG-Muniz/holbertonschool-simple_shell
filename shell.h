@@ -14,6 +14,8 @@
 /* Function Prototypes */
 void display_prompt(void);
 char *read_command_line(void);
-int execute_command (char *command);
+int execute_command(char *command);
+char **split_line(char *line);
+whitespace
 
 #endif /* SHELL_H */

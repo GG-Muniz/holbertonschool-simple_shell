@@ -1,46 +1,45 @@
 #include "shell.h"
 
 /**
- * execute_command - will execute the command inputed.
- * @command: what will be executed.
+ * execute_command - Execute a command with its arguments
+ * @args: Array of strings containing the command and its arguments
+ * @program_name: Name of the shell program for error messages
  *
- * Return: 1 to continue shell loop or 0 to exit.
- *
+ * Return: 1 to continue the shell, 0 to exit
  */
-int execute_command(char *command)
+int execute_command(char **args, char *program_name)
 {
-	pid_t child_pit;
+	pid_t pid;
 	int status;
-	char *argv[2];
 
-	/* If command is empty, return to prompt. */
-	if (command[0] == '\0')
-		return (1);
+	if (args == NULL || args[0] == NULL)
+		return 1;  /* Nothing to execute, return to prompt */
 
-	/* Set up arguments for execve */
-	argv[0] = command;
-	argv[1] = NULL;
-
-	/* Create a child process. */
-	child_pit = fork();
-
-	if (child_pit == -1) /* Failed */
+	/* Create a new process */
+	pid = fork();
+	if (pid == 0)
 	{
-		perror("Erorr");
-		return (1);
-	}
-	if (child_pit == 0) /* Child Process */
-	{
-		if (execve(command, argv, NULL) == -1)
+		/* Child process */
+		if (execve(args[0], args, environ) == -1)
 		{
-			perror("./shell");
+			/* Make error message match the example */
+			fprintf(stderr, "%s: 1: %s: not found\n", 
+					program_name, args[0]);
 			exit(EXIT_FAILURE);
 		}
 	}
+	else if (pid < 0)
+	{
+		/* Fork error */
+		perror("fork error");
+	}
 	else
 	{
-		/* Wait for child process to finish.*/
-		wait(&status);
+		/* Parent process - wait for child to finish */
+		do {
+			waitpid(pid, &status, WUNTRACED);
+		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
-	return (1);
+
+	return 1;
 }
