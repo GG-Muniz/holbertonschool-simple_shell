@@ -10,6 +10,9 @@ int is_only_whitespace(char *str)
 {
 	int i;
 
+	if (str == NULL)
+		return (1);
+
 	for (i = 0; str[i] != '\0'; i++)
 	{
 		if (str[i] != ' ' && str[i] != '\t' && str[i] != '\n' && str[i] != '\r')

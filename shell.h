@@ -14,6 +14,7 @@ char *read_command_line(void);
 int execute_command(char **args, char *program_name);
 char **split_line(char *line);
 int is_only_whitespace(char *str);
+void free_args(char **args);
 
 extern char **environ;
 
