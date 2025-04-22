@@ -1,5 +1,4 @@
 #include "shell.h"
-
 /**
  * execute_command - Execute a command with its arguments
  * @args: Array of strings containing the command and its arguments
@@ -12,33 +11,30 @@ int execute_command(char **args, char *program_name)
 	pid_t pid;
 	int status;
 
-	if (args == NULL || args[0] == NULL)
-		return 1;  /* Nothing to execute, return to prompt */
-
-	/* Create a new process */
+	/* Fork a child process */
 	pid = fork();
+
+	if (pid == -1)
+	{
+		/* Fork error */
+		perror("Error forking process");
+		return 1;
+	}
+
 	if (pid == 0)
 	{
-		/* Child process */
+		/* Child process - attempt to execute the command */
 		if (execve(args[0], args, environ) == -1)
 		{
-			/* Make error message match the example */
-			fprintf(stderr, "%s: 1: %s: not found\n", 
-					program_name, args[0]);
+			/* Format error message to match expected output */
+			fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
 			exit(EXIT_FAILURE);
 		}
 	}
-	else if (pid < 0)
-	{
-		/* Fork error */
-		perror("fork error");
-	}
 	else
 	{
-		/* Parent process - wait for child to finish */
-		do {
-			waitpid(pid, &status, WUNTRACED);
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+		/* Parent process - wait for child to complete */
+		waitpid(pid, &status, 0);
 	}
 
 	return 1;
