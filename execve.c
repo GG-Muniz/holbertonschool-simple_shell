@@ -44,12 +44,18 @@ int execute_command(char **args, char *program_name)
 			free(command_path);
 			exit(127);  /* Exit with command not found status */
 		}
+		/* This line will not be reached if execve succeeds */
+		exit(1);
 	}
 	else
 	{
 		/* Parent process - wait for child to complete */
 		waitpid(pid, &status, 0);
 		free(command_path);
+		
+		/* Return the exit status of the child if it exited normally */
+		if (WIFEXITED(status))
+			return (1); /* Still continue our shell regardless of command status */
 	}
 
 	return (1);

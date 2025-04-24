@@ -51,7 +51,11 @@ char *find_command_in_path(char *command)
 
 	/* Get the PATH environment variable without using getenv */
 	path_env = _getenv("PATH");
-	if (!path_env || path_env[0] == '\0')
+	if (!path_env)
+		return (NULL);  /* PATH not found */
+
+	/* Empty PATH is not the same as no PATH - handle empty PATH properly */
+	if (path_env[0] == '\0')
 		return (NULL);
 
 	path_copy = strdup(path_env);
