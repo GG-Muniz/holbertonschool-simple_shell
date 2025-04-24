@@ -1,5 +1,4 @@
 #include "shell.h"
-
 /**
  * main - Entry point for the simple shell program
  * @ac: Argument count
@@ -44,21 +43,28 @@ int main(int ac, char **av)
 
 		/* Parse input into arguments */
 		args = split_line(line);
-
+		
 		/* Skip empty commands */
 		if (args == NULL || args[0] == NULL)
 		{
-			free(args);
+			free_args(args);
 			continue;
 		}
 
+		/* Check for built-in commands first */
+		if (check_for_builtin(args))
+		{
+			free_args(args);
+			continue;
+		}
+		
 		/* Execute the command with arguments */
 		status = execute_command(args, program_name);
 
 		/* Free allocated memory */
 		free_args(args);
 	}
-
+	
 	/* Free the line buffer */
 	free(line);
 	return (0);
@@ -71,7 +77,7 @@ int main(int ac, char **av)
 void free_args(char **args)
 {
 	int i;
-
+	
 	if (args)
 	{
 		for (i = 0; args[i]; i++)
