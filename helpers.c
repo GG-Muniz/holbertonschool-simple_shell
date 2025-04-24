@@ -25,12 +25,12 @@ int is_only_whitespace(char *str)
  */
 void free_args(char **args)
 {
-    int i;
+	int i;
 
-    if (args)
-    {
-        for (i = 0; args[i]; i++)
-            free(args[i]);
-        free(args);
-    }
+	if (args)
+	{
+		for (i = 0; args[i]; i++)
+			free(args[i]);
+		free(args);
+	}
 }

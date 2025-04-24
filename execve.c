@@ -16,11 +16,11 @@ int execute_command(char **args, char *program_name)
 	/* Get the full command path */
 	command_path = find_command_in_path(args[0]);
 
-	/* If command not found, print error and return */
+	/* If command not found, print error and return without forking */
 	if (command_path == NULL)
 	{
 		fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
-		return (127 << 8); /* Return command not found status */
+		return (127 << 8); /* Return 127 as the exit status, just like bash */
 	}
 
 	/* Only fork if we found the command */
@@ -40,7 +40,7 @@ int execute_command(char **args, char *program_name)
 		{
 			fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
 			free(command_path);
-			exit(127);
+			exit(127); /* Exit with command not found status */
 		}
 	}
 	else

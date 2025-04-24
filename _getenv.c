@@ -42,7 +42,7 @@ char *find_command_in_path(char *command)
 		return (NULL);
 
 	/* If command contains a slash, it's a path itself - check if executable */
-	if (strchr(command, '/'))
+	if (strchr(command, '/') != NULL)
 	{
 		if (stat(command, &st) == 0 && (st.st_mode & S_IXUSR))
 			return (strdup(command));
@@ -51,7 +51,6 @@ char *find_command_in_path(char *command)
 
 	/* Get the PATH environment variable without using getenv */
 	path_env = _getenv("PATH");
-
 	/* If PATH doesn't exist or is empty, command can't be found */
 	if (!path_env || path_env[0] == '\0')
 		return (NULL);
