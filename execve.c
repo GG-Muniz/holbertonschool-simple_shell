@@ -6,7 +6,7 @@
  *
  * Return: 1 to continue the shell, 0 to exit
  */
-int execute_command(char **args, char *program_name)
+int execute_command(char **args)
 {
 	pid_t pid;
 	int status;
@@ -27,7 +27,7 @@ int execute_command(char **args, char *program_name)
 		if (execve(args[0], args, environ) == -1)
 		{
 			/* Format error message to match expected output */
-			fprintf(stderr, "%s: No such file or directory\n", program_name);
+			fprintf(stderr, "%s: No such file or directory\n", args[0]);
 			exit(EXIT_FAILURE);
 		}
 	}
