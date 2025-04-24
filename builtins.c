@@ -4,7 +4,7 @@
  * check_for_builtin - Check if command is a built-in and execute if it is
  * @args: Command arguments
  *
- * Return: 1 if builtin was executed, 0 if not builtin, 2 if exit
+ * Return: 1 if builtin was executed, 0 if not builtin, EXIT_SHELL if exit
  */
 int check_for_builtin(char **args)
 {
@@ -14,8 +14,8 @@ int check_for_builtin(char **args)
 	/* Check for exit command */
 	if (strcmp(args[0], "exit") == 0)
 	{
-		/* Return special code to signal exit */
-		return (2);
+		free_args(args);
+		exit(0);
 	}
 
 	/* Check for env command */

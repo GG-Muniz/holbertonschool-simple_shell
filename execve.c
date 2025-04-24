@@ -20,7 +20,7 @@ int execute_command(char **args, char *program_name)
 	if (command_path == NULL)
 	{
 		fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
-		return (1); /* Always continue the shell after a command failure */
+		return (1); /* Always continue the shell */
 	}
 
 	/* Only fork if we found the command */
@@ -30,7 +30,7 @@ int execute_command(char **args, char *program_name)
 		/* Fork error */
 		perror("Error forking process");
 		free(command_path);
-		return (1);
+		return (1); /* Continue the shell */
 	}
 
 	if (pid == 0)
