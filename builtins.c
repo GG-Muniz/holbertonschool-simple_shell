@@ -14,7 +14,7 @@ int check_for_builtin(char **args)
 	/* Check for exit command */
 	if (strcmp(args[0], "exit") == 0)
 	{
-		exit(EXIT_SUCCESS);
+		exit(0); /* Use 0 as exit code for normal termination */
 		return (1); /* This line won't be reached, but keeps compiler happy */
 	}
 

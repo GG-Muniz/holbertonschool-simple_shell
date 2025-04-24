@@ -15,7 +15,6 @@ int main(int ac, char **av)
 	ssize_t read;
 	int status = 1;
 	char *program_name = av[0];
-	char *cmd_path = find_command_in_path(args[0]);
 
 	(void)ac; /* Silence unused parameter warning */
 
@@ -61,17 +60,6 @@ int main(int ac, char **av)
 		}
 
 		/* Execute the command with arguments */
-		if (cmd_path == NULL)
-		{
-			fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
-			free_args(args);
-			/* For non-interactive mode, use the correct error code */
-			if (!isatty(STDIN_FILENO))
-				exit(127);
-			continue;
-		}
-
-		/* Only execute if command exists */
 		status = execute_command(args, program_name);
 
 		/* Free allocated memory */
