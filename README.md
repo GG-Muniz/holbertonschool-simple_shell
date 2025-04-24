@@ -352,7 +352,7 @@ Parses a string input from the user and splits it into an array of words (tokens
    - Carriage return `'\r'`
    - Newline `'\n'`
    - Alert `'\a'`
-
+ndling 
 2. **Dynamic Allocation**  
    Allocates memory dynamically for the array of tokens. Reallocates more space if the number of tokens exceeds the initial buffer size.
 
@@ -371,7 +371,8 @@ C program, C language, Linux Terminal, shell, Github
 ### Compilation
 GNU 89
 ### Challenges
-Create how to create a simple UNIX command-line interpreter (shell) from scratch. 
+Create how to create a simple UNIX command-line interpreter (shell) from scratch.
+Handling enviroment variables and issuses with white spaces, exit commands, exit handlings.
 
 ### Reference 
 Holberton reference page:Everything you need to know to start coding your own shell Public
