@@ -14,6 +14,7 @@ int main(int ac, char **av)
 	size_t len = 0;
 	ssize_t read;
 	int status = 1;
+	int builtin_status;
 	char *program_name = av[0];
 
 	(void)ac; /* Silence unused parameter warning */
@@ -31,8 +32,7 @@ int main(int ac, char **av)
 		{
 			if (isatty(STDIN_FILENO))
 				write(STDOUT_FILENO, "\n", 1);
-			free(line);
-			exit(0);
+			break;
 		}
 
 		/* Remove trailing newline character */
@@ -54,10 +54,19 @@ int main(int ac, char **av)
 		}
 
 		/* Check for built-in commands first */
-		if (check_for_builtin(args))
+		builtin_status = check_for_builtin(args);
+		if (builtin_status == 1)
 		{
+			/* Regular builtin executed */
 			free_args(args);
 			continue;
+		}
+		else if (builtin_status == 2)
+		{
+			/* Exit command detected */
+			free_args(args);
+			free(line);
+			exit(0);
 		}
 
 		/* Execute the command with arguments */

@@ -12,7 +12,6 @@
 #include <errno.h>
 
 /* Function Prototypes */
-/* Function Prototypes */
 void display_prompt(void);
 char *read_command_line(void);
 char **split_line(char *line);
