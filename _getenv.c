@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * _getenv - Get an environment variable
+ * _getenv - Custom implementation to get an environment variable
  * @name: Name of the environment variable
  *
  * Return: Value of the environment variable, or NULL if not found
@@ -9,7 +9,12 @@
 char *_getenv(const char *name)
 {
 	int i = 0;
-	int name_len = strlen(name);
+	int name_len;
+
+	if (!name || !environ)
+		return (NULL);
+
+	name_len = strlen(name);
 
 	while (environ[i])
 	{
@@ -59,7 +64,6 @@ char *find_command_in_path(char *command)
 	while (dir)
 	{
 		dir_len = strlen(dir);
-		/* Allocate memory for directory path + '/' + command + null terminator */
 		full_path = malloc(dir_len + command_len + 2);
 		if (!full_path)
 		{
@@ -67,12 +71,10 @@ char *find_command_in_path(char *command)
 			return (NULL);
 		}
 
-		/* Construct the full path */
 		strcpy(full_path, dir);
 		strcat(full_path, "/");
 		strcat(full_path, command);
 
-		/* Check if this path exists and is executable */
 		if (stat(full_path, &st) == 0 && (st.st_mode & S_IXUSR))
 		{
 			free(path_copy);

@@ -19,3 +19,18 @@ int is_only_whitespace(char *str)
 	}
 	return (1);
 }
+/**
+ * free_args - Frees the memory allocated for the argument array
+ * @args: Array of arguments to free
+ */
+void free_args(char **args)
+{
+    int i;
+
+    if (args)
+    {
+        for (i = 0; args[i]; i++)
+            free(args[i]);
+        free(args);
+    }
+}
