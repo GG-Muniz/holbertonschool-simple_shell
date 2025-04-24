@@ -20,7 +20,7 @@ int execute_command(char **args, char *program_name)
 	if (command_path == NULL)
 	{
 		fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
-		return (127 << 8); /* Return 127 as the exit status, just like bash */
+		return (127 << 8); /* Return 127 as the exit status */
 	}
 
 	/* Only fork if we found the command */
@@ -42,6 +42,8 @@ int execute_command(char **args, char *program_name)
 			free(command_path);
 			exit(127); /* Exit with command not found status */
 		}
+		/* This line should never be reached if execve works */
+		exit(0);
 	}
 	else
 	{
@@ -50,7 +52,4 @@ int execute_command(char **args, char *program_name)
 		free(command_path);
 		return (status);
 	}
-
-	/* This line won't be reached, but keeps compiler happy */
-	return (0);
 }

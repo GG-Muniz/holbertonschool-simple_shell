@@ -11,7 +11,11 @@ char *_getenv(const char *name)
 	int i = 0;
 	int name_len;
 
-	if (!name || !environ)
+	if (!name)
+		return (NULL);
+
+	/* If environ is NULL, no environment variables exist */
+	if (!environ)
 		return (NULL);
 
 	name_len = strlen(name);
@@ -49,8 +53,9 @@ char *find_command_in_path(char *command)
 		return (NULL);
 	}
 
-	/* Get the PATH environment variable without using getenv */
+	/* Get the PATH environment variable */
 	path_env = _getenv("PATH");
+
 	/* If PATH doesn't exist or is empty, command can't be found */
 	if (!path_env || path_env[0] == '\0')
 		return (NULL);
@@ -62,10 +67,11 @@ char *find_command_in_path(char *command)
 	command_len = strlen(command);
 	dir = strtok(path_copy, ":");
 
+	/* Loop through each directory in PATH */
 	while (dir)
 	{
 		dir_len = strlen(dir);
-		full_path = malloc(dir_len + command_len + 2);
+		full_path = malloc(dir_len + command_len + 2); /* +2 for '/' and '\0' */
 		if (!full_path)
 		{
 			free(path_copy);
@@ -76,6 +82,7 @@ char *find_command_in_path(char *command)
 		strcat(full_path, "/");
 		strcat(full_path, command);
 
+		/* Check if the file exists and is executable */
 		if (stat(full_path, &st) == 0 && (st.st_mode & S_IXUSR))
 		{
 			free(path_copy);
