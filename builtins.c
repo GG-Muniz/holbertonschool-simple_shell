@@ -14,7 +14,8 @@ int check_for_builtin(char **args)
 	/* Check for exit command */
 	if (strcmp(args[0], "exit") == 0)
 	{
-		exit(0); /* Exit with success status */
+		/* Exit immediately with success status */
+		exit(0);
 	}
 
 	/* Check for env command */
@@ -34,11 +35,13 @@ void print_environment(void)
 {
 	int i;
 
+	/* Handle case when environ is NULL */
 	if (environ == NULL)
 		return;
 
 	for (i = 0; environ[i]; i++)
 	{
+		/* Use write for more reliable output */
 		write(STDOUT_FILENO, environ[i], strlen(environ[i]));
 		write(STDOUT_FILENO, "\n", 1);
 	}

@@ -19,11 +19,14 @@ int execute_command(char **args, char *program_name)
 	/* If command not found, print error and return without forking */
 	if (command_path == NULL)
 	{
+		/* Format error message to match expected output */
 		fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
-		/* For non-interactive mode, use the correct error code */
+		
+		/* For non-interactive mode, exit with command not found status */
 		if (!isatty(STDIN_FILENO))
 			exit(127);
-		return (1); /* Continue the shell */
+			
+		return (1); /* Continue the shell in interactive mode */
 	}
 
 	/* Only fork if we found the command */
@@ -39,15 +42,13 @@ int execute_command(char **args, char *program_name)
 	if (pid == 0)
 	{
 		/* Child process - attempt to execute the command */
-		/* Use the full path we found */
 		if (execve(command_path, args, environ) == -1)
 		{
-			/* Format error message to match expected output */
+			/* Execve failed */
 			fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
 			free(command_path);
 			exit(127);  /* Exit with command not found status */
 		}
-		exit(0); /* This line won't be reached if execve succeeds */
 	}
 	else
 	{
