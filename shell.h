@@ -12,6 +12,7 @@
 #include <errno.h>
 
 /* Function Prototypes */
+/* Function Prototypes */
 void display_prompt(void);
 char *read_command_line(void);
 char **split_line(char *line);
@@ -21,6 +22,7 @@ void free_args(char **args);
 char *find_command_in_path(char *command);
 int check_for_builtin(char **args);
 void print_environment(void);
+char *_getenv(const char *name);
 
 extern char **environ;
 
