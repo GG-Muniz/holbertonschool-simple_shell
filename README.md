@@ -2,19 +2,13 @@
 Holberton Coding School San Juan - Simple Shell Group Project
 
 ## Table of Content
-:computer: 
-:computer:
-:computer:
+Description
+Files
 
 ## Description
 
-Simple_shell is a lightweight, interactive shell that accepts user commands, parses them, and executes them using fork and execve. It supports command arguments, built-in commands like exit, and works in both interactive and non-interactive modes.
-
-### What...
-
-# Simple Shell - Command Execution and Prompt Display
-
-This repository is part of a custom UNIX command line interpreter project. The files included here contribute to displaying the shell prompt and executing user commands using the `execve` system call.
+Create a a simple Unix command-line interpreter (shell) from scratch.
+Simple_shell is a lightweight, interactive shell that accepts user commands, parses them, and executes them using fork and execve. It supports command arguments, built-in commands like exit, and works in bothinteractive and non-interactive modes.
 
 ## Files
 
@@ -48,7 +42,7 @@ Behavior: Checks if the input is coming from a terminal using isatty(STDIN_FILEN
 
 Purpose: Ensures a user-friendly shell experience during interactive sessions.
 
-execve.c:
+##execve.c:
 
 This file contains the execute_command function which handles forking and executing a command entered by the user.
 
@@ -83,7 +77,7 @@ Useful for ignoring empty or whitespace-only input lines in the shell loop.
 if (is_only_whitespace(input))
     continue;
 
-main.c:
+##main.c:
  This document explains the functionality of the shell's entry point and its role in handling user input, command execution, and shell control flow.
 
 # Simple Shell - Main Entry Point
@@ -171,7 +165,7 @@ Designed to run in both interactive and non-interactive modes.
 
 Follows a simple loop structure suitable for expansion with more built-in commands or PATH handling improvements.
 
-man_1_simple_shell
+##man_1_simple_shell
 
 # Simple Shell Manual Page (`man_1_simple_shell`)
 
@@ -196,9 +190,9 @@ A manual page written in troff/groff format that provides documentation for the 
 ### `.SH NAME`
 Defines the name of the program.
 
-read_command_line.c:
+##read_command_line.c:
 
-# Simple Shell - Read Command Line
+ Simple Shell - Read Command Line
 
 This file contains the `read_command_line` function, which is responsible for reading user input from standard input (stdin) in the simple shell program.
 
@@ -239,7 +233,7 @@ if (line == NULL)
 }
 // Continue to tokenize and execute command
 
-shell.h:
+##shell.h:
 
 # Simple Shell - Header File (`shell.h`)
 
