@@ -1,16 +1,109 @@
 .TH SIMPLE SHELL "April 2025" "Holberton School of Coding San Juan Puerto Rico" " Simple Shell Manual"
 
+.TH SIMPLE_SHELL 1 "April 2025" "Holberton School of Coding San Juan Puerto Rico" "User Commands"
+
 .SH NAME
+simple_shell \- a simple UNIX command line interpreter built from scratch
 
 .SH SYNOPSIS
+.B simple_shell
+.RI [ no arguments ]
 
 .SH DESCRIPTION
+.B simple_shell
+is a lightweight UNIX command-line interpreter developed as a group project at Holberton School. It replicates some of the basic functionality of a traditional shell like bash, such as parsing and executing commands, supporting arguments, and managing both interactive and non-interactive modes.
+
+This shell program continuously prompts the user with
+.BR #cisfun$ ,
+reads the input, tokenizes the command, and attempts to execute it using
+.BR fork(2)
+and
+.BR execve(2).
+It supports a limited set of built-in commands (e.g., exit) and handles errors gracefully.
+
+.SH FILES
+.TP
+.B display_prompt.c
+Displays the custom shell prompt only if the shell is in interactive mode.
+
+.TP
+.B execve.c
+Contains the logic for command execution through forking and calling
+.BR execve(2).
+
+.TP
+.B helpers.c
+Provides utility functions like whitespace validation and argument memory cleanup.
+
+.TP
+.B main.c
+Entry point for the shell. Implements the main loop, handles reading, parsing, executing, and checking built-in commands.
+
+.TP
+.B read_command_line.c
+Reads user input from standard input using
+.BR getline(3),
+removes the newline character, and returns a cleaned-up input string.
+
+.TP
+.B shell.h
+Header file declaring all functions and including required standard libraries.
+
+.TP
+.B split.c
+Implements the
+.B split_line
+function that tokenizes user input into command and arguments.
 
 .SH RETURN VALUE
-
-.SH FORMAT SPECIFIERS
+The shell returns:
+.IP \(bu 2
+0 on successful execution or graceful exit
+.IP \(bu
+127 if a command is not found in non-interactive mode
 
 .SH EXAMPLES
+.TP
+.B Interactive mode:
+.EX
+$ ./simple_shell
+#cisfun$ ls
+file1.c  file2.c  main.c
+#cisfun$ exit
+.EE
+
+.TP
+.B Non-interactive mode:
+.EX
+$ echo "ls -l" | ./simple_shell
+-rw-r--r-- 1 user user 4096 Apr 24 00:00 main.c
+.EE
 
 .SH NOTES
+This shell was created for learning purposes and does not include features like pipes, redirections, or advanced scripting capabilities.
 
+.SH TECHNOLOGY
+Written in C language. Compiled using GNU89 standard on Linux-based systems. Code hosted and version-controlled with GitHub.
+
+.SH CHALLENGES
+Developing a shell from scratch involved understanding process management, system calls, memory management, and building a tokenizer and parser without using advanced libraries.
+
+.SH SEE ALSO
+.BR sh(1),
+.BR bash(1),
+.BR fork(2),
+.BR execve(2),
+.BR getline(3)
+
+.SH AUTHORS
+.TP
+Gabriel Garcia Muniz
+.UR https://github.com/GG-Muniz
+https://github.com/GG-Muniz
+.UE
+
+.TP
+Angel Bayo Torres
+.UR https://github.com/AngelD89
+https://github.com/AngelD89
+.UE
