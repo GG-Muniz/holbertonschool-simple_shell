@@ -16,7 +16,7 @@ int execute_command(char **args, char *program_name)
 	/* Get the full command path */
 	command_path = find_command_in_path(args[0]);
 
-	/* If command not found, print error and return without forking */
+	/* If command not found, print error and return */
 	if (command_path == NULL)
 	{
 		fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
@@ -30,7 +30,7 @@ int execute_command(char **args, char *program_name)
 		/* Fork error */
 		perror("Error forking process");
 		free(command_path);
-		return (1); /* Continue the shell */
+		return (1);
 	}
 
 	if (pid == 0)
@@ -38,10 +38,9 @@ int execute_command(char **args, char *program_name)
 		/* Child process - attempt to execute the command */
 		if (execve(command_path, args, environ) == -1)
 		{
-			/* Format error message to match expected output */
 			fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
 			free(command_path);
-			exit(127);  /* Exit with command not found status */
+			exit(127);
 		}
 	}
 	else
