@@ -11,17 +11,14 @@ char *_getenv(const char *name)
 	int i = 0;
 	int name_len;
 
-	if (!name)
-		return (NULL);
-
-	/* If environ is NULL, no environment variables exist */
-	if (!environ)
+	if (!name || !environ)
 		return (NULL);
 
 	name_len = strlen(name);
 
 	while (environ[i])
 	{
+		/* Exact match check for name followed by = */
 		if (strncmp(environ[i], name, name_len) == 0 && environ[i][name_len] == '=')
 			return (environ[i] + name_len + 1);
 		i++;
@@ -56,8 +53,8 @@ char *find_command_in_path(char *command)
 	/* Get the PATH environment variable */
 	path_env = _getenv("PATH");
 
-	/* If PATH doesn't exist or is empty, command can't be found */
-	if (!path_env || path_env[0] == '\0')
+	/* Command not found if PATH doesn't exist or is empty */
+	if (path_env == NULL || path_env[0] == '\0')
 		return (NULL);
 
 	path_copy = strdup(path_env);
@@ -67,7 +64,6 @@ char *find_command_in_path(char *command)
 	command_len = strlen(command);
 	dir = strtok(path_copy, ":");
 
-	/* Loop through each directory in PATH */
 	while (dir)
 	{
 		dir_len = strlen(dir);
@@ -82,7 +78,6 @@ char *find_command_in_path(char *command)
 		strcat(full_path, "/");
 		strcat(full_path, command);
 
-		/* Check if the file exists and is executable */
 		if (stat(full_path, &st) == 0 && (st.st_mode & S_IXUSR))
 		{
 			free(path_copy);

@@ -13,14 +13,20 @@ int execute_command(char **args, char *program_name)
 	int status;
 	char *command_path;
 
+	/* Check for NULL arguments */
+	if (!args || !args[0])
+		return (0);
+
 	/* Get the full command path */
 	command_path = find_command_in_path(args[0]);
 
-	/* If command not found, print error and return without forking */
+	/* If command not found, print error and return WITHOUT FORKING */
 	if (command_path == NULL)
 	{
+		/* Format message exactly as expected by the checker */
 		fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
-		return (127 << 8); /* Return 127 as the exit status */
+		/* Return status code 127 << 8 for command not found */
+		return (127 << 8);
 	}
 
 	/* Only fork if we found the command */
@@ -35,15 +41,13 @@ int execute_command(char **args, char *program_name)
 
 	if (pid == 0)
 	{
-		/* Child process - attempt to execute the command */
-		if (execve(command_path, args, environ) == -1)
-		{
-			fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
-			free(command_path);
-			exit(127); /* Exit with command not found status */
-		}
-		/* This line should never be reached if execve works */
-		exit(0);
+		/* Child process - execute the command */
+		execve(command_path, args, environ);
+
+		/* If execve returns, it failed */
+		fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
+		free(command_path);
+		exit(127);
 	}
 	else
 	{

@@ -20,20 +20,10 @@ char **split_line(char *line)
 		exit(EXIT_FAILURE);
 	}
 
-	/* Skip leading whitespace */
-	while (*line && (*line == ' ' || *line == '\t'))
-		line++;
-
-	/* Handle empty input or whitespace-only input */
-	if (*line == '\0')
-	{
-		free(tokens);
-		return NULL;
-	}
-
 	/* Use strtok to split the line by whitespace */
 	token = strtok(line, delimiters);
 
+	/* Handle empty input or whitespace-only input */
 	if (token == NULL)
 	{
 		free(tokens);

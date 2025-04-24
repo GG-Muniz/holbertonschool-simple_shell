@@ -16,11 +16,10 @@ int main(int ac, char **av)
 	int status = 1;
 	int builtin_status;
 	char *program_name = av[0];
-	int last_status = 0;  /* Track the status of the last command */
+	int last_status = 0;
 
-	(void)ac; /* Silence unused parameter warning */
+	(void)ac;
 
-	/* Main loop that keeps the shell running until exit */
 	while (status)
 	{
 		/* Display prompt if shell is running in interactive mode */
@@ -29,7 +28,7 @@ int main(int ac, char **av)
 
 		/* Read a line from the user */
 		read = getline(&line, &len, stdin);
-		if (read == -1) /* Handle EOF (Ctrl+D) */
+		if (read == -1)
 		{
 			if (isatty(STDIN_FILENO))
 				write(STDOUT_FILENO, "\n", 1);
@@ -46,9 +45,7 @@ int main(int ac, char **av)
 
 		/* Parse input into arguments */
 		args = split_line(line);
-
-		/* Skip empty commands */
-		if (args == NULL || args[0] == NULL)
+		if (!args || !args[0])
 		{
 			free_args(args);
 			continue;
@@ -64,7 +61,7 @@ int main(int ac, char **av)
 		}
 		else if (builtin_status == 2)
 		{
-			/* Exit command - use the status of the last command */
+			/* Exit command */
 			free_args(args);
 			free(line);
 			exit(last_status);
@@ -77,11 +74,9 @@ int main(int ac, char **av)
 		if (WIFEXITED(status))
 			last_status = WEXITSTATUS(status);
 
-		/* Free allocated memory */
 		free_args(args);
 	}
 
-	/* Free the line buffer */
 	free(line);
 	return (0);
 }
