@@ -15,6 +15,7 @@ int check_for_builtin(char **args)
 	if (strcmp(args[0], "exit") == 0)
 	{
 		/* Exit immediately with success status */
+		free_args(args);
 		exit(0);
 	}
 

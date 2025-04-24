@@ -31,7 +31,8 @@ int main(int ac, char **av)
 		{
 			if (isatty(STDIN_FILENO))
 				write(STDOUT_FILENO, "\n", 1);
-			break;
+			free(line);
+			exit(0);
 		}
 
 		/* Remove trailing newline character */
