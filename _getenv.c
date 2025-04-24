@@ -54,9 +54,9 @@ char *find_command_in_path(char *command)
 	if (!path_env)
 		return (NULL);  /* PATH not found */
 
-	/* Empty PATH is not the same as no PATH - handle empty PATH properly */
+	/* Handle empty PATH explicitly */
 	if (path_env[0] == '\0')
-		return (NULL);
+		return (NULL);  /* Empty PATH, command not found */
 
 	path_copy = strdup(path_env);
 	if (!path_copy)

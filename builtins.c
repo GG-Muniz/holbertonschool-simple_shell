@@ -14,8 +14,7 @@ int check_for_builtin(char **args)
 	/* Check for exit command */
 	if (strcmp(args[0], "exit") == 0)
 	{
-		exit(0); /* Use 0 as exit code for normal termination */
-		return (1); /* This line won't be reached, but keeps compiler happy */
+		exit(0); /* Exit with success status */
 	}
 
 	/* Check for env command */
@@ -35,8 +34,12 @@ void print_environment(void)
 {
 	int i;
 
+	if (environ == NULL)
+		return;
+
 	for (i = 0; environ[i]; i++)
 	{
-		printf("%s\n", environ[i]);
+		write(STDOUT_FILENO, environ[i], strlen(environ[i]));
+		write(STDOUT_FILENO, "\n", 1);
 	}
 }

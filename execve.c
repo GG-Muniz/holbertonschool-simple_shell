@@ -20,6 +20,9 @@ int execute_command(char **args, char *program_name)
 	if (command_path == NULL)
 	{
 		fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
+		/* For non-interactive mode, use the correct error code */
+		if (!isatty(STDIN_FILENO))
+			exit(127);
 		return (1); /* Continue the shell */
 	}
 
@@ -44,18 +47,13 @@ int execute_command(char **args, char *program_name)
 			free(command_path);
 			exit(127);  /* Exit with command not found status */
 		}
-		/* This line will not be reached if execve succeeds */
-		exit(1);
+		exit(0); /* This line won't be reached if execve succeeds */
 	}
 	else
 	{
 		/* Parent process - wait for child to complete */
 		waitpid(pid, &status, 0);
 		free(command_path);
-		
-		/* Return the exit status of the child if it exited normally */
-		if (WIFEXITED(status))
-			return (1); /* Still continue our shell regardless of command status */
 	}
 
 	return (1);
