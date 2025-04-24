@@ -3,10 +3,11 @@
 /**
  * check_for_builtin - Check if command is a built-in and execute if it is
  * @args: Command arguments
+ * @last_status: Exit status of the last command
  *
  * Return: 1 if builtin was executed, 0 if not builtin, 2 if exit
  */
-int check_for_builtin(char **args)
+int check_for_builtin(char **args, int last_status)
 {
 	if (args == NULL || args[0] == NULL)
 		return (0);
@@ -14,7 +15,8 @@ int check_for_builtin(char **args)
 	/* Check for exit command */
 	if (strcmp(args[0], "exit") == 0)
 	{
-		return (2); /* Special code for exit */
+		free_args(args);
+		exit(last_status); /* Exit with the status of the last command */
 	}
 
 	/* Check for env command */
@@ -45,3 +47,49 @@ void print_environment(void)
 		write(STDOUT_FILENO, "\n", 1);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

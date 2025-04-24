@@ -19,7 +19,7 @@ int execute_command(char **args, char *program_name);
 int is_only_whitespace(char *str);
 void free_args(char **args);
 char *find_command_in_path(char *command);
-int check_for_builtin(char **args);
+int check_for_builtin(char **args, int last_status);
 void print_environment(void);
 char *_getenv(const char *name);
 

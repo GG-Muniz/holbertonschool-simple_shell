@@ -13,14 +13,14 @@ int main(int ac, char **av)
 	char **args = NULL;
 	size_t len = 0;
 	ssize_t read;
-	int status = 1;
-	int builtin_status;
+	int continue_loop = 1;
+	int last_status = 0;
 	char *program_name = av[0];
 
 	(void)ac; /* Silence unused parameter warning */
 
 	/* Main loop that keeps the shell running until exit */
-	while (status)
+	while (continue_loop)
 	{
 		/* Display prompt if shell is running in interactive mode */
 		if (isatty(STDIN_FILENO))
@@ -54,23 +54,14 @@ int main(int ac, char **av)
 		}
 
 		/* Check for built-in commands first */
-		builtin_status = check_for_builtin(args);
-		if (builtin_status == 1)
+		if (check_for_builtin(args, last_status))
 		{
-			/* Regular builtin executed */
 			free_args(args);
 			continue;
 		}
-		else if (builtin_status == 2)
-		{
-			/* Exit command */
-			free_args(args);
-			free(line);
-			exit(0); /* Exit the shell */
-		}
 
 		/* Execute the command with arguments */
-		status = execute_command(args, program_name);
+		last_status = execute_command(args, program_name);
 
 		/* Free allocated memory */
 		free_args(args);
@@ -78,5 +69,5 @@ int main(int ac, char **av)
 
 	/* Free the line buffer */
 	free(line);
-	return (0);
+	return (last_status);
 }
