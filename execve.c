@@ -20,8 +20,7 @@ int execute_command(char **args, char *program_name)
 	if (command_path == NULL)
 	{
 		fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
-		/* Do not exit in non-interactive mode, continue running */
-		return (1); /* Continue the shell */
+		return (1); /* Always continue the shell after a command failure */
 	}
 
 	/* Only fork if we found the command */
