@@ -18,7 +18,6 @@ char *_getenv(const char *name)
 
 	while (environ[i])
 	{
-		/* Exact match check for name followed by = */
 		if (strncmp(environ[i], name, name_len) == 0 && environ[i][name_len] == '=')
 			return (environ[i] + name_len + 1);
 		i++;
@@ -38,23 +37,24 @@ char *find_command_in_path(char *command)
 	int command_len, dir_len;
 	struct stat st;
 
-	/* Check if command is NULL or empty */
+	/* Handle null or empty command */
 	if (!command || command[0] == '\0')
 		return (NULL);
 
-	/* If command contains a slash, it's a path itself - check if executable */
-	if (strchr(command, '/') != NULL)
+	/* If command contains a slash, check if it's executable */
+	if (strchr(command, '/'))
 	{
-		if (stat(command, &st) == 0 && (st.st_mode & S_IXUSR))
-			return (strdup(command));
+		if (stat(command, &st) == 0)
+		{
+			if (st.st_mode & S_IXUSR)
+				return (strdup(command));
+		}
 		return (NULL);
 	}
 
-	/* Get the PATH environment variable */
+	/* Get PATH and check if it exists */
 	path_env = _getenv("PATH");
-
-	/* Command not found if PATH doesn't exist or is empty */
-	if (path_env == NULL || path_env[0] == '\0')
+	if (!path_env)
 		return (NULL);
 
 	path_copy = strdup(path_env);
@@ -64,10 +64,11 @@ char *find_command_in_path(char *command)
 	command_len = strlen(command);
 	dir = strtok(path_copy, ":");
 
+	/* Search each directory in PATH */
 	while (dir)
 	{
 		dir_len = strlen(dir);
-		full_path = malloc(dir_len + command_len + 2); /* +2 for '/' and '\0' */
+		full_path = malloc(dir_len + command_len + 2);
 		if (!full_path)
 		{
 			free(path_copy);
