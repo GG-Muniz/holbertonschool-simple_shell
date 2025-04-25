@@ -18,7 +18,7 @@ int execute_command(char **args, char *program_name)
 	if (command_path == NULL)
 	{
 		fprintf(stderr, "%s: 1: %s: not found\n", program_name, args[0]);
-		return (1);
+		exit(127);
 	}
 
 	/* Fork only if command exists */
