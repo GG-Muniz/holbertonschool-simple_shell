@@ -29,13 +29,19 @@ int execute_command(char **args)
 	if (pid == 0)
 	{
 		if (execv(command_path, args) == -1)
+		{
 			perror("execv");
 		exit(EXIT_FAILURE);
-	}
+		}
+		{
 	else if (pid < 0)
 		perror("fork");
+		}
+		{
 	else
 		waitpid(pid, &status, 0);
+		}
+	}
 
 	free(command_path);
 	return (1);
